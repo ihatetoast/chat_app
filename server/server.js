@@ -1,10 +1,25 @@
 const path = require('path');
-const publicPath = path.join(__dirname, '../public');
+const http = require('http');
 const express = require('express');
+const socketIO = require('socket.io');
 
-const app = express();
-const PORT = process.env.PORT || 8000;
+const publicPath = path.join(__dirname, '../public');
+const port = process.env.PORT || 8000;
+
+var app = express();
+var server = http.createServer(app);
+var io = socketIO(server);
+
 app.use(express.static(publicPath));
-app.listen(PORT, () => {
-  console.log('Chatty McChatterson is calling you on extension', PORT);
+
+io.on('connection', socket => {
+  console.log("weet woo. noo foo' connected");
+
+  socket.on('disconnect', () => {
+    console.log("boo hoo. foo' went to the loo.");
+  });
+});
+
+server.listen(port, () => {
+  console.log('Chatty McChatterson is calling you on extension', port);
 });
