@@ -14,21 +14,16 @@ app.use(express.static(publicPath));
 
 io.on('connection', socket => {
   console.log("weet woo. noo foo' connected");
+
   //from server to client
-  socket.emit('newEmail', {
-    from: 'georgia@hardstarking.com',
-    text: 'Stay sexy and ...',
-    createdAt: 123
-  });
-  socket.emit('newMessage', {
-    from: 'elvis@cookie.org',
-    text: 'Hellsyeah, I want a cookie. Hand it over!'
-  });
-  socket.on('createNewEmail', newEmail => {
-    console.log('createNewEmail  received from client', newEmail);
-  });
-  socket.on('createNewMessage', newMessage => {
-    console.log('createNewMessage received from client', newMessage);
+  socket.on('createNewMessage', msg => {
+    console.log('createNewMessage received from client', msg);
+    // io.emit emits to cxs (broadcast) vs socket, which is one cx.
+    io.emit('newMessage', {
+      from: msg.from,
+      text: msg.text,
+      createdAt: new Date().getTime()
+    });
   });
   socket.on('disconnect', () => {
     console.log("boo hoo. foo' went to the loo.");
