@@ -3,6 +3,9 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 
+//helpers utils
+const { generateMessage } = require('./utils/message');
+
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 8000;
 
@@ -22,27 +25,15 @@ io.on('connection', socket => {
     createdAt: new Date().getTime()
   });
   // broadcast to others that there's a new user connected.
-  socket.broadcast.emit('createNewMessage', {
-    from: 'Admin',
-    text: 'A new Binger has joined the chatroom',
-    createdAt: new Date().getTime()
-  });
+  socket.broadcast.emit(
+    'createNewMessage',
+    generateMessage('Admin', 'New chatter ready to bing.')
+  );
 
   //from server to client
   socket.on('createNewMessage', msg => {
     console.log('createNewMessage received from client', msg);
-    // io.emit emits to cxs vs socket, which is one cx.
-    // not same as broadcast. bc is for everyone BUT the one client emitting.
-    io.emit('newMessage', {
-      from: msg.from,
-      text: msg.text,
-      createdAt: new Date().getTime()
-    });
-    // socket.broadcast.emit('newMessage', {
-    //   from: msg.from,
-    //   text: msg.text,
-    //   createdAt: new Date().getTime()
-    // });
+    io.emit('createNewMessage', generateMessage(msg.from, msg.text));
   });
   socket.on('disconnect', () => {
     console.log("boo hoo. foo' went to the loo.");
