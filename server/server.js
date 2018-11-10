@@ -19,11 +19,10 @@ io.on('connection', socket => {
   console.log("weet woo. noo foo' connected");
   // upon connecting ...
   // create a message from the admin to the newly cx user to welcome.
-  socket.emit('createNewMessage', {
-    from: 'Admin',
-    text: 'Welcome to Chatty Chatty Bing Bing',
-    createdAt: new Date().getTime()
-  });
+  socket.emit(
+    'createNewMessage',
+    generateMessage('Admin', 'Welcome to Chatty Chatty Bing Bing')
+  );
   // broadcast to others that there's a new user connected.
   socket.broadcast.emit(
     'createNewMessage',
@@ -31,9 +30,10 @@ io.on('connection', socket => {
   );
 
   //from server to client
-  socket.on('createNewMessage', msg => {
+  socket.on('createNewMessage', (msg, cb) => {
     console.log('createNewMessage received from client', msg);
     io.emit('createNewMessage', generateMessage(msg.from, msg.text));
+    cb("server says, 'yo. got it.'");
   });
   socket.on('disconnect', () => {
     console.log("boo hoo. foo' went to the loo.");
@@ -41,5 +41,5 @@ io.on('connection', socket => {
 }); //end io.on
 
 server.listen(port, () => {
-  console.log('Chatty McChatterson is calling you on extension', port);
+  console.log(`Chatty McChatterson is calling you on extension ${port}`);
 });
