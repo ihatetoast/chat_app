@@ -4,7 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 //helpers utils
-const { generateMessage } = require('./utils/message');
+const { generateMessage, generateGeoLocMessage } = require('./utils/message');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 8000;
@@ -34,6 +34,13 @@ io.on('connection', socket => {
     console.log('createNewMessage received from client', msg);
     io.emit('createNewMessage', generateMessage(msg.from, msg.text));
     cb("server says, 'yo. got it.'");
+  });
+
+  socket.on('sendGeoLocation', coords => {
+    io.emit(
+      'createGeoLocMessage',
+      generateGeoLocMessage('Admin', coords.lat, coords.long)
+    );
   });
   socket.on('disconnect', () => {
     console.log("boo hoo. foo' went to the loo.");
