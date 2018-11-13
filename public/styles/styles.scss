@@ -1,0 +1,71 @@
+@import 'reset';
+// HEADERSFont-Family: 'Nunito', Sans-Serif;
+
+// TEXTFont-Family: 'PT Sans', Sans-Serif;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', 'PT Sans', Arial, 'Lucida Grande', sans-serif;
+  font-weight: 300;
+  font-size: 0.95rem;
+}
+
+ul,
+li {
+  list-style-position: inside;
+}
+
+h1,
+button {
+  font-family: 'Nunito', Arial, sans-serif;
+}
+p,
+li {
+  font-family: 'PT Sans', 'Lucida Grande', sans-serif;
+}
+
+//mixins:
+@mixin findMe($bc, $bgc) {
+  border: 1px solid $bc;
+  background-color: $bgc;
+}
+// ugly styles for finding my bits and bobs:
+header,
+footer {
+  @include findMe(rgb(123, 255, 0), #800080);
+}
+main {
+  @include findMe(#eb1290, #fa7d09);
+}
+aside {
+  @include findMe(#0051ff, #08b908);
+}
+
+//grid
+.site {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 10vw 30vw 10vw;
+  grid-gap: 1em;
+}
+header,
+footer {
+  grid-column: 1 / span 5;
+}
+
+main,
+aside {
+  grid-column: 1 / span 5;
+}
+
+@media (min-width: 700px) {
+  main {
+    grid-column: span 3;
+  }
+
+  aside {
+    grid-column: 1 / span 1;
+  }
+}
