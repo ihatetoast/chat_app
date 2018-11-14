@@ -11,9 +11,10 @@ socket.on('disconnect', function() {
 //     LISTENING FOR SERVER
 /************************************** */
 socket.on('createNewMessage', function(newMessage) {
-  console.log('new message received from server', newMessage);
+  // console.log('new message received from server', newMessage);
+  const formattedTimestamp = moment(newMessage.createdAt).format('h:mm a');
   const li = $('<li></li>');
-  li.text(`${newMessage.from}: ${newMessage.text}`);
+  li.text(`${newMessage.from} ${formattedTimestamp}: ${newMessage.text}`);
   $('#messages-list').prepend(li);
 });
 

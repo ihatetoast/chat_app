@@ -3,7 +3,6 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 
-//helpers utils
 const { generateMessage, generateGeoLocMessage } = require('./utils/message');
 
 const publicPath = path.join(__dirname, '../public');
