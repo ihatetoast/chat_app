@@ -33,7 +33,7 @@ io.on('connection', socket => {
   socket.on('createNewMessage', (msg, cb) => {
     console.log('createNewMessage received from client', msg);
     io.emit('createNewMessage', generateMessage(msg.from, msg.text));
-    cb("server says, 'yo. got it.'");
+    cb();
   });
 
   socket.on('sendGeoLocation', coords => {

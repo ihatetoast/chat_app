@@ -11,7 +11,9 @@
   font-weight: 300;
   font-size: 0.95rem;
 }
-
+html {
+  height: 100%;
+}
 ul,
 li {
   list-style-position: inside;
@@ -31,7 +33,7 @@ li {
   border: 1px solid $bc;
   background-color: $bgc;
 }
-// ugly styles for finding my bits and bobs:
+// START ugly styles for finding my bits and bobs:
 header,
 footer {
   @include findMe(rgb(123, 255, 0), #800080);
@@ -42,30 +44,54 @@ main {
 aside {
   @include findMe(#0051ff, #08b908);
 }
+section {
+  @include findMe(#a100ff, #b90817);
+}
+// END ugly styles for finding my bits and bobs
 
-//grid
+// GRID YOUR LOINS GRID YOUR LOINS GRID YOUR LOINS
+// GRID YOUR LOINS GRID YOUR LOINS GRID YOUR LOINS
+// GRID YOUR LOINS GRID YOUR LOINS GRID YOUR LOINS
 .site {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 10vw 30vw 10vw;
+  grid-template-rows: 6rem 1fr 5rem;
+  grid-template-areas:
+    'header'
+    'main'
+    'footer';
+  grid-gap: 1em;
+  height: 100%;
+}
+header {
+  grid-area: header;
+}
+
+main {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  // grid-template-rows: 4rem 1fr; // for mobile
   grid-gap: 1em;
 }
+section {
+  grid-column: 2 / span 3;
+}
+
+footer {
+  grid-area: footer;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-gap: 1em;
+}
+form {
+  grid-column: 1 / span 7;
+}
+input {
+  width: 85%;
+}
 header,
+main,
 footer {
   grid-column: 1 / span 5;
-}
-
-main,
-aside {
-  grid-column: 1 / span 5;
-}
-
-@media (min-width: 700px) {
-  main {
-    grid-column: span 3;
-  }
-
-  aside {
-    grid-column: 1 / span 1;
-  }
 }

@@ -33,15 +33,16 @@ socket.on('createGeoLocMessage', function(geoMsg) {
 /************************************** */
 $('#chat-form').on('submit', function(e) {
   e.preventDefault();
+  const messageField = $('[name=message]');
   //call socket.emit
   socket.emit(
     'createNewMessage',
     {
       from: 'Anonymous Binger',
-      text: $('[name=message]').val()
+      text: messageField.val()
     },
     function(data) {
-      console.log(data);
+      messageField.val('');
     }
   );
 });
@@ -58,16 +59,19 @@ geoLocBtn.on('click', function() {
       `Honestly. it's ${new Date().getFullYear()}. Update your bloody browser, you sandworm. Because you are on grandpa's computer, your browser does not support geolocation.`
     );
   }
+  geoLocBtn.attr('disabled', 'disabled').text('Big brother looking...');
   navigator.geolocation.getCurrentPosition(
     function(pos) {
       // console.log(`Lat: ${pos.coords.latitude}
       // Lon: ${pos.coords.longitude}`);
+      geoLocBtn.removeAttr('disabled').text('Stalk me');
       socket.emit('sendGeoLocation', {
         lat: pos.coords.latitude,
         long: pos.coords.longitude
       });
     },
     function(err) {
+      geoLocBtn.removeAttr('disabled').text('Stalk me');
       alert('Unable to fetch location.');
     }
   );

@@ -134,6 +134,9 @@ table {
   font-weight: 300;
   font-size: 0.95rem; }
 
+html {
+  height: 100%; }
+
 ul,
 li {
   list-style-position: inside; }
@@ -159,25 +162,45 @@ aside {
   border: 1px solid #0051ff;
   background-color: #08b908; }
 
+section {
+  border: 1px solid #a100ff;
+  background-color: #b90817; }
+
 .site {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 10vw 30vw 10vw;
+  grid-template-rows: 6rem 1fr 5rem;
+  grid-template-areas: 'header' 'main' 'footer';
+  grid-gap: 1em;
+  height: 100%; }
+
+header {
+  grid-area: header; }
+
+main {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   grid-gap: 1em; }
 
+section {
+  grid-column: 2 / span 3; }
+
+footer {
+  grid-area: footer;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-gap: 1em; }
+
+form {
+  grid-column: 1 / span 7; }
+
+input {
+  width: 85%; }
+
 header,
+main,
 footer {
   grid-column: 1 / span 5; }
-
-main,
-aside {
-  grid-column: 1 / span 5; }
-
-@media (min-width: 700px) {
-  main {
-    grid-column: span 3; }
-
-  aside {
-    grid-column: 1 / span 1; } }
 
 /*# sourceMappingURL=styles.css.map */
