@@ -11,3 +11,5 @@ This follows Andrew Mead's Node course on Udemy. I will do what I can to add my 
 - jQuery
 - NodeJS
 - ExpressJS
+- MomentJS
+- Gulp

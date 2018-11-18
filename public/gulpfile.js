@@ -7,15 +7,22 @@ var uglify = require('gulp-uglify');
 
 gulp.task('sass', function() {
   return gulp
-    .src('styles/styles.scss')
+    .src('./styles/styles.scss')
     .pipe(sass())
     .pipe(cssnano())
     .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('es6', function() {
+gulp.task('js', function() {
   return gulp
-    .src('scripts/index.js')
+    .src('./scripts/index.js')
     .pipe(babel())
     .pipe(gulp.dest('dist/js'));
 });
+
+gulp.task('watch', function() {
+  gulp.watch('./styles/*.scss', ['sass']);
+  gulp.watch('./scripts/index.js', ['js']);
+});
+
+gulp.task('default', ['sass', 'js', 'watch']);

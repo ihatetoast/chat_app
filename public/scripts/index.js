@@ -11,24 +11,25 @@ socket.on('disconnect', function() {
 //     LISTENING FOR SERVER
 /************************************** */
 socket.on('createNewMessage', function(newMessage) {
-  // console.log('new message received from server', newMessage);
   const formattedTimestamp = moment(newMessage.createdAt).format('h:mm a');
-  const li = $('<li></li>');
-  li.text(`${newMessage.from} ${formattedTimestamp}: ${newMessage.text}`);
-  $('#messages-list').prepend(li);
+
+  const template = $('#msg-template').html();
+  const html = Mustache.render(template, {
+    text: newMessage.text,
+    from: newMessage.from,
+    createdAt: formattedTimestamp
+  });
+  $('#messages-list').prepend(html);
 });
 
 socket.on('createGeoLocMessage', function(geoMsg) {
-  // console.log(geoMsg);
   const formattedTimestamp = moment(geoMsg.createdAt).format('h:mm a');
-  const li = $('<li></li>');
-  const a = $(
-    '<a target="_blank" rel="noopener noreferrer">Where I\'m binging</a>'
-  );
-  li.text(`${geoMsg.from} ${formattedTimestamp}: `);
-  a.attr('href', geoMsg.url);
-  li.append(a);
-  $('#messages-list').prepend(li);
+  const template = $('#geoLoc-template').html();
+  const html = Mustache.render(template, {
+    url: geoMsg.url,
+    createdAt: formattedTimestamp
+  });
+  $('#messages-list').prepend(html);
 });
 /************************************** */
 //        EMIT CHAT FROM FORM:
