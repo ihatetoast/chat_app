@@ -19,12 +19,13 @@ socket.on('createNewMessage', function(newMessage) {
 });
 
 socket.on('createGeoLocMessage', function(geoMsg) {
-  console.log(geoMsg);
+  // console.log(geoMsg);
+  const formattedTimestamp = moment(geoMsg.createdAt).format('h:mm a');
   const li = $('<li></li>');
   const a = $(
     '<a target="_blank" rel="noopener noreferrer">Where I\'m binging</a>'
   );
-  li.text(`${geoMsg.from}: `);
+  li.text(`${geoMsg.from} ${formattedTimestamp}: `);
   a.attr('href', geoMsg.url);
   li.append(a);
   $('#messages-list').prepend(li);
