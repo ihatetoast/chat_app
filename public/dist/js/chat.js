@@ -2,8 +2,44 @@
 
 var socket = io();
 var $ = jQuery;
+/**
+ *
+ * helper fcn to deterimine if we scroll to bottom:
+ * height of msg plus height of client >= total scroll height?
+ * scroll on
+ */
+
+var scrollToBottom = function scrollToBottom() {
+  // SELECTORS
+  var messages = $('#messages-list'); // // get the last msg sent by using children and getting the li that's the last child:
+
+  var lastMsg = messages.children('li:last-child'); // HEIGHTS
+
+  var clientHeight = messages.prop('clientHeight');
+  var scrollTop = messages.prop('scrollTop');
+  var scrollHeight = messages.prop('scrollHeight');
+  var lastMsgHeight = lastMsg.innerHeight(); // // second-to-last message:
+
+  var penultMsgHeight = lastMsg.prev().innerHeight(); // CALCULATIONS AND CONDITIONS:
+
+  if (clientHeight + scrollTop + lastMsgHeight + penultMsgHeight >= scrollHeight) {
+    messages.scrollTop(scrollHeight);
+  }
+};
+
 socket.on('connect', function () {
-  console.log('weet woo. connected to server');
+  console.log('weet woo. connected to server'); //jQ has param that is a string of the search. deparam gets str and rets obj
+  //deparams is a helper fcn. credit in deparam file.
+
+  var params = $.deparam(window.location.search);
+  socket.emit('join', params, function (err) {
+    if (err) {
+      alert('Handle and room are required.');
+      window.location.href = '/';
+    } else {
+      console.log('no errors');
+    }
+  });
 });
 socket.on('disconnect', function () {
   console.log('boo hoo. disconnected from server');
@@ -21,7 +57,8 @@ socket.on('createNewMessage', function (newMessage) {
     from: newMessage.from,
     createdAt: formattedTimestamp
   });
-  $('#messages-list').prepend(html);
+  $('#messages-list').append(html);
+  scrollToBottom();
 });
 socket.on('createGeoLocMessage', function (geoMsg) {
   var formattedTimestamp = moment(geoMsg.createdAt).format('h:mm a');
@@ -30,7 +67,8 @@ socket.on('createGeoLocMessage', function (geoMsg) {
     url: geoMsg.url,
     createdAt: formattedTimestamp
   });
-  $('#messages-list').prepend(html);
+  $('#messages-list').append(html);
+  scrollToBottom();
 });
 /************************************** */
 //        EMIT CHAT FROM FORM:

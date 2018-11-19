@@ -68,14 +68,18 @@ header {
 }
 
 main {
-  grid-area: main;
   display: grid;
+  grid-area: main;
   grid-template-columns: repeat(4, 1fr);
   // grid-template-rows: 4rem 1fr; // for mobile
   grid-gap: 1em;
+
+  width: 100%;
 }
 section {
   grid-column: 2 / span 3;
+  overflow-y: scroll;
+  max-height: 100%;
 }
 
 footer {

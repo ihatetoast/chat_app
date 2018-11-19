@@ -1,7 +1,47 @@
 var socket = io();
 var $ = jQuery;
+
+/**
+ *
+ * helper fcn to deterimine if we scroll to bottom:
+ * height of msg plus height of client >= total scroll height?
+ * scroll on
+ */
+
+const scrollToBottom = () => {
+  // SELECTORS
+  const messages = $('#messages-list');
+  // // get the last msg sent by using children and getting the li that's the last child:
+  const lastMsg = messages.children('li:last-child');
+  // HEIGHTS
+  const clientHeight = messages.prop('clientHeight');
+  const scrollTop = messages.prop('scrollTop');
+  const scrollHeight = messages.prop('scrollHeight');
+  const lastMsgHeight = lastMsg.innerHeight();
+  // // second-to-last message:
+  const penultMsgHeight = lastMsg.prev().innerHeight();
+
+  // CALCULATIONS AND CONDITIONS:
+  if (
+    clientHeight + scrollTop + lastMsgHeight + penultMsgHeight >=
+    scrollHeight
+  ) {
+    messages.scrollTop(scrollHeight);
+  }
+};
 socket.on('connect', function() {
   console.log('weet woo. connected to server');
+  //jQ has param that is a string of the search. deparam gets str and rets obj
+  //deparams is a helper fcn. credit in deparam file.
+  const params = $.deparam(window.location.search);
+  socket.emit('join', params, function(err) {
+    if (err) {
+      alert('Handle and room are required.');
+      window.location.href = '/';
+    } else {
+      console.log('no errors');
+    }
+  });
 });
 socket.on('disconnect', function() {
   console.log('boo hoo. disconnected from server');
@@ -19,7 +59,8 @@ socket.on('createNewMessage', function(newMessage) {
     from: newMessage.from,
     createdAt: formattedTimestamp
   });
-  $('#messages-list').prepend(html);
+  $('#messages-list').append(html);
+  scrollToBottom();
 });
 
 socket.on('createGeoLocMessage', function(geoMsg) {
@@ -29,7 +70,8 @@ socket.on('createGeoLocMessage', function(geoMsg) {
     url: geoMsg.url,
     createdAt: formattedTimestamp
   });
-  $('#messages-list').prepend(html);
+  $('#messages-list').append(html);
+  scrollToBottom();
 });
 /************************************** */
 //        EMIT CHAT FROM FORM:
